@@ -1,0 +1,22 @@
+# Settings for the MySQL server daemon
+[mysqld]
+
+bind-address = 127.0.0.1
+
+port = 3306
+
+# A character set defines which characters can be stored in the database
+
+character-set-server = utf8mb4
+
+# A collation defines how to compare and sort characters.
+# utf8mb4_general_ci
+#   │       │     │
+#   │       │     └─ ci = Case Insensitive
+#   │       └─ general = General comparison rules
+#   └─ utf8mb4 = Character set this collation work
+
+collation-server = utf8mb4_general_ci
+
+# Skip DNS lookups for faster connections
+skip-name-resolve

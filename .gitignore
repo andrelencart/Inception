@@ -39,3 +39,13 @@
 
 # debug information files
 *.dwo
+
+# Environment variables
+.env
+Srcs/.env
+
+# VSCode
+.vscode/
+
+# Docker volumes and data
+/home/*/data/
