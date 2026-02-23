@@ -39,21 +39,21 @@ services:
       - inception
     restart: always
   
-  networks:
-    inception:
-      name: inception
+networks:
+  inception:
+    name: inception
 
-  volumes:
-    mariadb_data:
-      driver: local
-      driver_opts:
-        type: none
-        o: bind
-        device: /home/andcarva/data/mariadb
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/andcarva/data/mariadb
 
-    wordpress_data:
-      driver: local
-      driver_opts:
-        type: none
-        o: bind
-        device: /home/andcarva/data/wordpress
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/andcarva/data/wordpress
