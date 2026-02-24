@@ -16,6 +16,8 @@ COPY tools/init.sh /usr/local/bin/
 # WORDIR - Changes the current directory / run from this directory / Creates the directory if it doesn't exist
 # WORKDIR /var/www/html
 
+RUN chmod +x /usr/local/bin/init.sh
+
 # EXPOSE - Exposes the port where the data packages will be received
 EXPOSE 3306
 
