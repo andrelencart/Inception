@@ -27,6 +27,8 @@ services:
 
   nginx:
     build: ./nginx
+    args:
+      DOMAIN_NAME = ${DOMAIN_NAME}
     image: nginx
     container_name: nginx
     depends_on:
