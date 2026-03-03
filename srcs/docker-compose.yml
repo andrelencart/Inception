@@ -26,9 +26,10 @@ services:
     restart: always
 
   nginx:
-    build: ./nginx
-    args:
-      DOMAIN_NAME = ${DOMAIN_NAME}
+    build:
+      context: ./nginx
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
     image: nginx
     container_name: nginx
     depends_on:
