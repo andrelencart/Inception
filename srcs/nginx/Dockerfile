@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:oldstable
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	nginx openssl ca-certificates \
@@ -12,7 +12,8 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 	-out /etc/nginx/ssl/inception.crt \
 	-subj "/C=FR/ST=IDF/L=Paris/0=42/OU=Inception/CN=${DOMAIN_NAME}"
 
-COPY conf/nginx.conf /etc/nginx/conf.d/deault.conf
+RUN rm -f /etc/nginx/sites-enabled/default
+COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
 
