@@ -53,7 +53,7 @@ else
 	echo "[wordpress] WordPress already installed, skipping install"
 fi
 
-THEME_SLUG="variations"
+THEME_SLUG="the-cozy-blog"
 if wp theme is-installed "$THEME_SLUG" --allow-root --path="/var/www/html"; then
 	wp theme activate "$THEME_SLUG" --allow-root --path="/var/www/html"
 else
@@ -63,4 +63,4 @@ fi
 chown -R www-data:www-data /var/www/html
 
 echo "[wordpress] Starting php-fpm..."
-exec php-fpm7.4 -F
+exec php-fpm8.2 -F
