@@ -42,7 +42,7 @@
 
 # Environment variables
 .env
-Srcs/.env
+srcs/.env
 
 # VSCode
 .vscode/
