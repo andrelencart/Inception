@@ -1,6 +1,6 @@
 NAME = inception
 COMPOSE_DIR = srcs
-COMPOSE = docker compose -f $(COMPOSE_DIR)/docker-compose.yml
+COMPOSE = docker-compose -f $(COMPOSE_DIR)/docker-compose.yml
 
 DATA_DIR = /home/andcarva/data
 MDB_DIR = $(DATA_DIR)/mariadb
@@ -8,10 +8,14 @@ WP_DIR  = $(DATA_DIR)/wordpress
 
 all: up
 
-up:
+setup-data:
+	@sudo mkdir -p $(MDB_DIR) $(WP_DIR)
+	@sudo chown -R $$USER:$$USER $(DATA_DIR)
+
+up: setup-data
 	@$(COMPOSE) up -d
 
-build:
+build: setup-data
 	@$(COMPOSE) up -d --build
 
 down:
@@ -29,11 +33,11 @@ logs:
 ps:
 	@$(COMPOSE) ps
 
-# Removes containers + networks + named volumes - not bind-mount data dirs
-clean: down
+# Removes containers + networks + Docker volumes, but keeps persistent host data
+clean:
 	@$(COMPOSE) down -v
 
-# Full reset: removes bind-mount data too (DB + WP files)
+# Full reset: removes persistent database and WordPress files
 fclean: clean reset-data
 
 reset-data:
@@ -44,4 +48,4 @@ reset-data:
 re: fclean build
 
 .PHONY: all up build down stop restart logs ps clean fclean re \
-		reset-data
+		reset-data setup-data

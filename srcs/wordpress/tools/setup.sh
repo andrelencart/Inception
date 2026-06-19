@@ -46,7 +46,7 @@ if ! wp core is-installed --allow-root --path="/var/www/html" >/dev/null 2>&1; t
 		--allow-root \
 		"${WP_USER}" "${WP_USER_EMAIL}" \
 		--user_pass="${WP_USER_PASSWORD}" \
-		--role=author || true
+		--role=author
 
 	echo "[wordpress] WordPress installed"
 else

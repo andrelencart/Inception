@@ -1,12 +1,50 @@
+*This project has been created as part of the 42 curriculum by andcarva.*
+
 # Inception
 
-`Inception` is a Docker-based infrastructure project (42) that deploys a small web stack using **Docker Compose**:
+## Description
 
-- **Nginx** (HTTPS/TLS on port 443)
-- **WordPress** (PHP-FPM)
-- **MariaDB** (database)
+Inception is a system administration project that builds a small Docker-based infrastructure. It runs three services in separate containers:
 
-All services run in isolated containers and communicate through a dedicated Docker network.
+- Nginx, used as the only public entrypoint through HTTPS on port 443.
+- WordPress with PHP-FPM, used to serve the website.
+- MariaDB, used as the WordPress database.
+
+The goal is to understand how to build custom Docker images, connect containers through a private Docker network, persist data with Docker volumes, and configure a secure web stack using TLS.
+
+## Project description
+
+This project uses Docker Compose to build and start all services. Each service has its own Dockerfile and its own container.
+
+The request flow is:
+
+1. The client connects to `https://andcarva.42.fr`.
+2. Nginx receives the HTTPS request on port 443.
+3. PHP requests are forwarded to the WordPress container through FastCGI.
+4. WordPress communicates with MariaDB through the Docker network.
+5. WordPress files and database data are persisted using Docker volumes.
+
+### Virtual Machines vs Docker
+
+A virtual machine virtualizes a full operating system, including its own kernel. Docker containers share the host kernel and isolate only the application environment. Containers are lighter, faster to start, and easier to reproduce, while virtual machines provide stronger isolation but use more resources.
+
+### Secrets vs Environment Variables
+
+Environment variables are simple to use and are loaded by Docker Compose through the `.env` file. They are useful for configuration values such as domain names and database names.
+
+Secrets are safer for sensitive values such as passwords because they are stored separately and are not exposed as plainly as environment variables. For this project, confidential files must not be committed to the Git repository.
+
+### Docker Network vs Host Network
+
+A Docker network isolates the containers from the host and allows services to communicate using service names such as `mariadb` and `wordpress`.
+
+The host network would remove this isolation and expose services more directly. This project uses a dedicated Docker network so that only Nginx is reachable from outside the infrastructure.
+
+### Docker Volumes vs Bind Mounts
+
+Docker volumes are managed by Docker and are used to persist container data safely. Bind mounts directly map a host path into a container.
+
+This project uses Docker named volumes for the WordPress files and MariaDB database, with data stored under `/home/andcarva/data` on the host machine.
 
 ---
 
@@ -34,7 +72,7 @@ All services run in isolated containers and communicate through a dedicated Dock
 ## Requirements
 
 - Docker
-- Docker Compose plugin (`docker compose`)
+Docker Compose (`docker-compose` or the Docker Compose plugin)
 - `sudo` access (used by `make reset-data` / `make fclean`)
 
 ---
@@ -69,14 +107,14 @@ Optional (second user):
 
 ---
 
-## Persistent volumes (bind mounts)
+## Persistent volumes
 
-Data is persisted on the host using bind mounts:
+Data is persisted using Docker named volumes backed by storage under `/home/andcarva/data` on the host:
 
-- MariaDB: `/home/andcarva/data/mariadb`
-- WordPress files: `/home/andcarva/data/wordpress`
+- MariaDB database: `/home/andcarva/data/mariadb`
+- WordPress website files: `/home/andcarva/data/wordpress`
 
-This means containers can be destroyed/rebuilt without losing data unless you explicitly delete these directories.
+This means containers can be destroyed and rebuilt without losing data unless these directories or the Docker volumes are explicitly removed.
 
 ---
 
@@ -121,8 +159,8 @@ make down
 make clean
 ```
 
-### Full reset (also deletes bind mount data)
-This wipes the database and WordPress files and starts fresh:
+### Full reset (also deletes persistent volume data)
+This wipes the database and WordPress files stored under `/home/andcarva/data` and starts fresh:
 ```bash
 make fclean
 make build
@@ -165,3 +203,21 @@ echo "127.0.0.1 $DOMAIN_NAME" | sudo tee -a /etc/hosts
 - Nginx listens on **443** and proxies PHP execution to WordPress via FastCGI (`wordpress:9000`).
 - WordPress uses MariaDB as its backend database.
 - The stack runs on a custom Docker network called `inception`.
+
+---
+
+## Resources
+
+- Docker documentation
+- Docker Compose documentation
+- Nginx documentation
+- WordPress CLI documentation
+- MariaDB documentation
+- PHP-FPM documentation
+
+
+## AI usage
+
+AI was used as a review assistant to compare the project against the subject requirements, identify missing documentation sections, and suggest improvements to the README and configuration files.
+
+All final changes were reviewed, tested, and understood before being kept in the project.
