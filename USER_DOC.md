@@ -117,7 +117,7 @@ Or use Docker Compose directly:
 
 ```bash
 cd srcs
-docker-compose ps
+docker compose ps
 ```
 
 Expected running containers:

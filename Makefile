@@ -1,6 +1,6 @@
 NAME = inception
 COMPOSE_DIR = srcs
-COMPOSE = docker-compose -f $(COMPOSE_DIR)/docker-compose.yml
+COMPOSE = docker compose -f $(COMPOSE_DIR)/docker-compose.yml
 
 DATA_DIR = /home/andcarva/data
 MDB_DIR = $(DATA_DIR)/mariadb

@@ -49,3 +49,6 @@ srcs/.env
 
 # Docker volumes and data
 /home/*/data/
+
+#Secrets
+secrets/

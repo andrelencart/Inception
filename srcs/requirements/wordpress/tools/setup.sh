@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+DB_PASSWORD="$(cat /run/secrets/db_password)"
+WP_ADMIN_PASSWORD="$(cat /run/secrets/credentials)"
+WP_USER_PASSWORD="$(cat /run/secrets/credentials)"
+export DB_PASSWORD WP_ADMIN_PASSWORD WP_USER_PASSWORD
+
 echo "[wordpress] Starting WordPress setup..."
 
 mkdir -p /run/php

@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+DB_PASSWORD="$(cat /run/secrets/db_password)"
+DB_ROOT_PASSWORD="$(cat /run/secrets/db_root_password)"
+export DB_PASSWORD DB_ROOT_PASSWORD
+
 mkdir -p /run/mysqld
 chown -R mysql:mysql /var/lib/mysql
 chown -R mysql:mysql /run/mysqld

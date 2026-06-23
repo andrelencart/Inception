@@ -40,7 +40,7 @@ The development environment needs:
 
 * A Linux virtual machine
 * Docker
-* Docker Compose (`docker-compose` or the Docker Compose plugin)
+* Docker Compose (`docker compose` or the Docker Compose plugin)
 * `make`
 * `sudo` access
 
@@ -48,7 +48,7 @@ Check Docker:
 
 ```bash
 docker --version
-docker-compose --version
+docker compose --version
 ```
 
 ## Environment setup
@@ -69,16 +69,16 @@ Example variables:
 DOMAIN_NAME=andcarva.42.fr
 
 DB_NAME=wordpress
-DB_USER=wp_user
+DB_USER=the_database_user
 DB_PASSWORD=change_this_password
 DB_ROOT_PASSWORD=change_this_root_password
 
 WP_TITLE=Inception
-WP_ADMIN_USER=andcarva_owner
+WP_ADMIN_USER=the_wp_admin_user
 WP_ADMIN_PASSWORD=change_this_admin_password
 WP_ADMIN_EMAIL=andcarva@student.42.fr
 
-WP_USER=andcarva_user
+WP_USER=the_wp_user
 WP_USER_EMAIL=user@student.42.fr
 WP_USER_PASSWORD=change_this_user_password
 ```
