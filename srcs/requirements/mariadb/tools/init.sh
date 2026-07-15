@@ -9,36 +9,47 @@ mkdir -p /run/mysqld
 chown -R mysql:mysql /var/lib/mysql
 chown -R mysql:mysql /run/mysqld
 
-# Initialize if marker is missing OR mysql system database directory is missing
-if [ ! -f "/var/lib/mysql/.initialized" ] || [ ! -d "/var/lib/mysql/mysql" ]; then
-  echo "[mariadb] Initializing database..."
-  mariadb-install-db --user=mysql --datadir=/var/lib/mysql
+# Initialize only when the MariaDB system database does not exist
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+	echo "[mariadb] Initializing database..."
 
-  echo "[mariadb] Starting temporary server..."
-  mysqld_safe --skip-networking &
-  pid="$!"
+	mariadb-install-db \
+		--user=mysql \
+		--datadir=/var/lib/mysql
 
-  while ! mariadb-admin ping --silent; do sleep 1; done
+	echo "[mariadb] Creating database and user..."
 
-  echo "[mariadb] Creating database and user..."
-  mariadb -u root <<-EOSQL
-    CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;
-    CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
-    GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
-    FLUSH PRIVILEGES;
-EOSQL
+	mariadbd \
+		--bootstrap \
+		--user=mysql \
+		--datadir=/var/lib/mysql <<-EOSQL
+			FLUSH PRIVILEGES;
 
-  echo "[mariadb] Shutting down temporary server..."
-  mariadb-admin -u root -p"${DB_ROOT_PASSWORD}" shutdown
+			CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;
 
-  wait "$pid" || true
+			CREATE USER IF NOT EXISTS '${DB_USER}'@'%'
+			IDENTIFIED BY '${DB_PASSWORD}';
 
-  touch /var/lib/mysql/.initialized
-  echo "[mariadb] Initialization complete."
+			GRANT ALL PRIVILEGES
+			ON \`${DB_NAME}\`.*
+			TO '${DB_USER}'@'%';
+
+			ALTER USER 'root'@'localhost'
+			IDENTIFIED BY '${DB_ROOT_PASSWORD}';
+
+			FLUSH PRIVILEGES;
+	EOSQL
+
+	touch /var/lib/mysql/.initialized
+	chown mysql:mysql /var/lib/mysql/.initialized
+
+	echo "[mariadb] Initialization complete."
 else
-  echo "[mariadb] Database already initialized, skipping setup."
+	echo "[mariadb] Database already initialized, skipping setup."
 fi
 
 echo "[mariadb] Starting MariaDB..."
-exec mysqld --user=mysql --datadir=/var/lib/mysql
+
+exec mariadbd \
+	--user=mysql \
+	--datadir=/var/lib/mysql

@@ -2,8 +2,8 @@
 set -e
 
 DB_PASSWORD="$(cat /run/secrets/db_password)"
-WP_ADMIN_PASSWORD="$(cat /run/secrets/credentials)"
-WP_USER_PASSWORD="$(cat /run/secrets/credentials)"
+WP_ADMIN_PASSWORD="$(grep '^WP_ADMIN_PASSWORD=' /run/secrets/credentials | cut -d '=' -f2-)"
+WP_USER_PASSWORD="$(grep '^WP_USER_PASSWORD=' /run/secrets/credentials | cut -d '=' -f2-)"
 export DB_PASSWORD WP_ADMIN_PASSWORD WP_USER_PASSWORD
 
 echo "[wordpress] Starting WordPress setup..."

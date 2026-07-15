@@ -3,7 +3,8 @@ FROM debian:oldstable
 RUN apt-get update && apt-get install -y \
 	mariadb-server \
 	mariadb-client \
-	&& rm -rf /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/* \
+	&& rm -rf /var/lib/mysql/*
 
 # COPY - <source-on-host> <destination-in-container>
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
@@ -14,7 +15,6 @@ COPY tools/init.sh /usr/local/bin/
 # ADD = COPY but can Auto-extract tar files and Download from URLs
 
 # WORDIR - Changes the current directory / run from this directory / Creates the directory if it doesn't exist
-# WORKDIR /var/www/html
 
 RUN chmod +x /usr/local/bin/init.sh
 

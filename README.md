@@ -118,7 +118,7 @@ This means containers can be destroyed and rebuilt without losing data unless th
 
 ---
 
-## Usage
+## Instructions
 
 ### Start the stack
 ```bash
@@ -216,7 +216,7 @@ echo "127.0.0.1 $DOMAIN_NAME" | sudo tee -a /etc/hosts
 - PHP-FPM documentation
 
 
-## AI usage
+### AI usage
 
 AI was used as a review assistant to compare the project against the subject requirements, identify missing documentation sections, and suggest improvements to the README and configuration files.
 

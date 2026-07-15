@@ -119,7 +119,7 @@ make up
 
 The Makefile is responsible for using Docker Compose to build and launch the application.
 
-## Managing the stack
+## Managing the stack (Makefile Usage)
 
 Show running containers:
 
@@ -267,7 +267,7 @@ There should be at least two users:
 Check available databases:
 
 ```bash
-docker exec -it mariadb sh -lc 'mysql -u"$DB_USER" -p"$DB_PASSWORD" -e "SHOW DATABASES;"'
+docker exec -it mariadb sh -lc 'mysql -u"root" -p"/home/andcarva/Documents/Inception/secrets/db_root_password.txt" -e "SHOW DATABASES;"'
 ```
 
 Check WordPress tables:
@@ -284,7 +284,24 @@ Test HTTPS:
 curl -kI https://andcarva.42.fr
 ```
 
+Test HTTP:
+
+```bash
+curl -kI http://andcarva.42.fr
+```
+
+
 The Nginx container must be the only entrypoint into the infrastructure through port `443`.
+
+## Checking SSL/TLS certificate
+
+```bash
+openssl s_client \
+  -connect andcarva.42.fr:443 \
+  -servername andcarva.42.fr \
+  -tls1_2 </dev/null 2>/dev/null \
+  | grep -E 'Protocol|Cipher is|Cipher    '
+  ```
 
 ## Security notes
 
